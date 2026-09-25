@@ -13,13 +13,32 @@ class PosifySeeder extends Seeder
 {
     public function run(): void
     {
-        // Login utama: username admin / password admin321
+        // Akun demo — sinkron dengan kotak "Akun demo" di auth/login.blade.php
+        // dan tabel login di CUSTOMIZE.md. Jangan ubah password di satu tempat saja.
         User::updateOrCreate(
-            ['name' => 'admin'],
+            ['email' => 'admin@posify.id'],
             [
-                'email' => 'admin@posify.id',
+                'name' => 'admin',
                 'password' => Hash::make('admin321'),
                 'role' => 'owner',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'owner@posify.id'],
+            [
+                'name' => 'Owner',
+                'password' => Hash::make('password'),
+                'role' => 'owner',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'kasir@posify.id'],
+            [
+                'name' => 'Kasir Andi',
+                'password' => Hash::make('password'),
+                'role' => 'cashier',
             ]
         );
 

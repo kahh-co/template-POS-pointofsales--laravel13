@@ -15,12 +15,13 @@ npm run build                       # production CSS/JS
 php artisan serve                   # buka http://127.0.0.1:8000
 ```
 
-Login demo:
+Login demo (sinkron dengan `PosifySeeder` + kotak "Akun demo" di halaman login):
 
-| Role | Email | Password |
-|------|-------|----------|
-| Owner | owner@posify.id | password |
-| Kasir | kasir@posify.id | password |
+| Role | Username / Email | Password |
+|------|------------------|----------|
+| Owner (admin) | `admin` / `admin@posify.id` | `admin321` |
+| Owner | `owner@posify.id` | `password` |
+| Kasir | `kasir@posify.id` | `password` |
 
 ## 2. Peta Struktur (yang boleh diedit)
 
@@ -103,5 +104,32 @@ File `resources/views/receipt/print.blade.php` (`#receipt-area`, 80mm). CSS prin
 | Stok tidak berkurang | cek `CheckoutService`, pastikan request `items:[{product_id,quantity}]` valid |
 | Gambar 404 | `php artisan storage:link` |
 | Route hilang | `php artisan route:list`, `php artisan config:clear` |
+
+## 6. Status Integrasi (per 25 Sep 2026)
+
+> Belum ada integrasi pihak ketiga real. Semua transaksi 100% lokal via `POST /pos/checkout -> PosController -> CheckoutService`.
+
+### A. Yang BELUM ada
+- `Payment Gateway (Midtrans / Xendit / Tripay / Stripe)`: tidak ada SDK, tidak ada `API_KEY`, tidak ada webhook.
+- `WhatsApp (Fonnte / Wablas)`: tidak ada.
+- `RajaOngkir / ekspedisi`: tidak ada.
+- `Realtime (Pusher / Firebase)`: `BROADCAST_CONNECTION=log` saja.
+- Catatan QRIS: bukan gateway. Hanya upload manual gambar QRIS di `settings/index.blade.php` + metode bayar manual `Cash/QRIS/Debit/Transfer` di `pos/index.blade.php:114`, dicatat di `CheckoutService::process()` tanpa verifikasi otomatis.
+
+### B. Yang SUDAH ada (bawaan Laravel + frontend)
+| Kategori | Detail / file acuan |
+|---|---|
+| DB | `SQLite` dev, siap `MySQL` prod via `.env` + `config/database.php` |
+| Storage lokal | Disk `local`, `storage/app/public/*` via `asset('storage/...')`, wajib `php artisan storage:link` sekali |
+| Auth/Session/Cache/Queue | Session `database`, Cache `database`, Queue `database`, Broadcast `log` |
+| Mail | `MAIL_MAILER=log` (dummy). Placeholder `postmark/resend/ses` di `config/services.php`, `env` masih kosong |
+| Logging | `stack/single`, placeholder `LOG_SLACK_WEBHOOK_URL` di `config/logging.php:78` belum diisi |
+| AWS S3 | Key di `.env:59-62` ada tapi kosong, tidak dipakai |
+| Frontend | `Vite + Tailwind v4 + Alpine.js + Chart.js + Axios` (`package.json`, `resources/js/app.js`). `GuzzleHttp` hanya transitif dari `laravel/framework`, belum dipakai call API eksternal |
+
+### C. Kalau mau nambah integrasi baru
+1. Tambah SDK di `composer.json` / `package.json`, jangan taruh secret hardcode — taruh di `.env` + baca via `config/services.php`.
+2. Taruh logic call API di `app/Services/` baru (contoh: `PaymentService.php`), jangan di controller. `CheckoutService` tetap satu-satunya tempat hitung kasir.
+3. Tambah route webhook di `routes/web.php` (jangan lupa exclude CSRF kalau perlu) + test via `php artisan route:list`.
 
 Selamat ngoprek — kalau mau nambah fitur besar (member, supplier, multi-store), buat tabel + controller baru, jangan menumpuk ke 5 tabel MVP.

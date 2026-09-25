@@ -58,10 +58,21 @@
 
             <div class="mt-5 rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 p-4 text-xs text-slate-600">
                 <p class="font-bold text-indigo-900 mb-1">Akun demo</p>
-                <div class="flex gap-2">
-                    <code class="flex-1 bg-white border border-indigo-100 rounded-lg px-3 py-2 font-mono">admin</code>
-                    <code class="flex-1 bg-white border border-indigo-100 rounded-lg px-3 py-2 font-mono">admin321</code>
+                <div class="space-y-2 font-mono">
+                    <div class="flex gap-2">
+                        <code class="flex-1 bg-white border border-indigo-100 rounded-lg px-3 py-2">admin</code>
+                        <code class="flex-1 bg-white border border-indigo-100 rounded-lg px-3 py-2">admin321</code>
+                    </div>
+                    <div class="flex gap-2">
+                        <code class="flex-1 bg-white border border-indigo-100 rounded-lg px-3 py-2">owner@posify.id</code>
+                        <code class="flex-1 bg-white border border-indigo-100 rounded-lg px-3 py-2">password</code>
+                    </div>
+                    <div class="flex gap-2">
+                        <code class="flex-1 bg-white border border-indigo-100 rounded-lg px-3 py-2">kasir@posify.id</code>
+                        <code class="flex-1 bg-white border border-indigo-100 rounded-lg px-3 py-2">password</code>
+                    </div>
                 </div>
+                <p class="mt-2 text-slate-500">Bisa login pakai username <span class="font-mono">admin</span> atau email. Bukan <span class="font-mono">admin123</span>.</p>
             </div>
         </div>
     </div>
