@@ -1,0 +1,8 @@
+{
+  "$schema": "https://scaffdev.vercel.app/schemas/scaff.template.json",
+  "name": "POSIFY",
+  "slug": "posify-laravel",
+  "framework": "laravel",
+  "provides": {},
+  "removalGuides": {}
+}
